@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 
-import 'firstContainer.dart';
-
 class HomePage extends StatefulWidget{
   const HomePage({Key? key}) : super(key: key);
 
@@ -18,6 +16,8 @@ class _HomePageState extends State<HomePage> {
   final _database = FirebaseDatabase.instance.reference();
   final database = FirebaseDatabase.instance.reference();
   late StreamSubscription _readDatabase;
+
+
   @override
   void initState() {
     super.initState();
@@ -44,7 +44,52 @@ class _HomePageState extends State<HomePage> {
         child: SingleChildScrollView(
           child: Column(
             children: <Widget> [
-              FirstContainer(),
+              Container(
+                color: Colors.blue,
+                width: _screenWidth,
+                child: const Padding(
+                  padding: EdgeInsets.only(top: 25, left: 30, bottom: 25),
+                  child: Text(
+                    "smart bin",
+
+                  ),
+                ),
+              ),
+
+              Container(
+                color: Colors.blue,
+                width: MediaQuery.of(context).size.width,
+                child: Stack(
+                  children: <Widget> [
+                    Positioned(
+                      bottom: 0,
+                      child: Container(
+                        color: Colors.red,
+                        width: _screenWidth,
+                        height: _screenHeight * 0.075,
+                      ),
+                    ),
+
+                    Center(
+                      child: SizedBox(
+                        child: Image(image: AssetImage('assets/images/bin-open.png'),),
+                        height: _screenHeight * 0.4,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              Container(
+                width: _screenWidth,
+                height: _screenHeight,
+                color: Colors.yellow,
+                child: Column(
+                  children: <Widget> [
+
+                  ],
+                ),
+              ),
 
               Text(_displayText, style: const TextStyle(fontSize: 50, color: Colors.black),),
               ElevatedButton(
