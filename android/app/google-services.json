@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "917995347729",
+    "firebase_url": "https://autosealingbiniotproject-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "autosealingbiniotproject",
+    "storage_bucket": "autosealingbiniotproject.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:917995347729:android:f18fce2e897342148076b0",
+        "android_client_info": {
+          "package_name": "com.example.project"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "917995347729-p3hol72tu0h83rl90vte18k20un5nsii.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.project",
+            "certificate_hash": "81661a9e8762c77039de8cf44d7a75190dd58786"
+          }
+        },
+        {
+          "client_id": "917995347729-on6vted63a0hvcke326ia857l0ddqd6b.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyABuJR74fEvht8Z95Nllmred7fnmcWqefk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "917995347729-on6vted63a0hvcke326ia857l0ddqd6b.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
