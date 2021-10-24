@@ -72,15 +72,15 @@ flutter:
   fonts:
     - family: Comfortaa
       fonts:
-        - asset: assets/fonts/Comfortaa-Light
+        - asset: assets/fonts/Comfortaa-Light.ttf
           weight: 100
-        - asset: assets/fonts/Comfortaa-Medium
+        - asset: assets/fonts/Comfortaa-Medium.ttf
           weight: 200
-        - asset: assets/fonts/Comfortaa-Regular
+        - asset: assets/fonts/Comfortaa-Regular.ttf
           weight: 300
-        - asset: assets/fonts/Comfortaa-SemiBold
+        - asset: assets/fonts/Comfortaa-SemiBold.ttf
           weight: 400
-        - asset: assets/fonts/Comfortaa-Bold
+        - asset: assets/fonts/Comfortaa-Bold.ttf
           weight: 500
 
   # An image asset can refer to one or more resolution-specific "variants", see

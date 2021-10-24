@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/widgets.dart';
 import 'constant.dart';
 
 class HomePage extends StatefulWidget{
@@ -20,6 +21,8 @@ class _HomePageState extends State<HomePage> {
   final database = FirebaseDatabase.instance.reference();
   late StreamSubscription _readDatabase;
   late String _lidStatusImage = 'assets/images/bin-close.png';
+  late int _lid;
+  late int _humid;
 
   @override
   void initState() {
@@ -37,10 +40,14 @@ class _HomePageState extends State<HomePage> {
     });
 
     _database.child('/lidStatus').onValue.listen((event) {
-      final int lid = event.snapshot.value;
+      _lid = event.snapshot.value;
       setState(() {
-        lid == 1? _lidStatusImage = 'assets/images/bin-open.png' : _lidStatusImage = 'assets/images/bin-close.png';
-        lid == 1? _lidStatusButton = 'CLOSE LID' : _lidStatusButton = 'OPEN LID';
+        _lid == 1? _lidStatusImage = 'assets/images/bin-open.png' : _lidStatusImage = 'assets/images/bin-close.png';
+        _lid == 1? _lidStatusButton = 'CLOSE LID' : _lidStatusButton = 'OPEN LID';
+      });
+
+      _database.child('/humidity').onValue.listen((event) {
+        _humid = event.snapshot.value;
       });
     });
 
@@ -50,7 +57,21 @@ class _HomePageState extends State<HomePage> {
         _wifiStatus = wifiSSID;
       });
     });
+  }
 
+  void lidState() async {
+    print("button pressed!");
+    if (_lid == 1) {
+      print("lid status = 1");
+      try {
+        await database.update({'/lidStatus': 0});
+      } catch (e) {print("Exception was: $e");}
+    } else {
+      print("lid status = 0");
+      try {
+        await database.update({'/lidStatus': 1});
+      } catch (e) {print("Exception was: $e");};
+    }
   }
 
   @override
@@ -92,11 +113,14 @@ class _HomePageState extends State<HomePage> {
                       ),
 
                       Padding(
-                        padding: EdgeInsets.only(bottom: 20),
-                        child: Center(
-                          child: SizedBox(
-                            child: Image(image: AssetImage(_lidStatusImage),),
-                            height: _screenHeight * 0.45,
+                        padding: const EdgeInsets.only(bottom: 20),
+                        child: InkWell(
+                          onTap: () {lidState();},
+                          child: Center(
+                            child: SizedBox(
+                              child: Image(image: AssetImage(_lidStatusImage),),
+                              height: _screenHeight * 0.45,
+                            ),
                           ),
                         ),
                       ),
@@ -109,7 +133,7 @@ class _HomePageState extends State<HomePage> {
                 height: _screenHeight * 0.35,
                 width: _screenWidth,
                 child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 0),
+                  padding: const EdgeInsets.symmetric(horizontal: 0),
                   child: Column(
                     children: <Widget> [
                       Row(
@@ -121,25 +145,30 @@ class _HomePageState extends State<HomePage> {
 
                               //WIFI STATUS
                               Padding(
-                                padding: EdgeInsets.only(right: 10, bottom: 10),
+                                padding: const EdgeInsets.only(right: 10, bottom: 10),
                                 child: Container(
                                   width: _screenWidth * 0.45,
                                   height: _screenHeight * 0.125,
                                   decoration: cardDecoration,
                                   child: Padding(
-                                    padding: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+                                    padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
                                     child: Column(
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: <Widget> [
-                                        Text(
-                                          "status",
-                                          style: TextStyle(fontSize: 15, color: Color(0xFF807182)),
+                                        const Text(
+                                          "wifi status",
+                                          style: TextStyle(
+                                              fontSize: 15,
+                                              color: ThemeColors.textColor,
+                                              fontFamily: 'Comfortaa',
+                                              fontWeight: FontWeight.w300
+                                          ),
                                         ),
                                         Row(
                                           crossAxisAlignment: CrossAxisAlignment.center,
                                           children: <Widget> [
                                             Padding(
-                                              padding: EdgeInsets.only(top: 15, right: 15),
+                                              padding: const EdgeInsets.only(top: 15, right: 15),
                                               child: SizedBox(
                                                 height: _screenHeight * 0.025,
                                                 child: Image.asset(
@@ -148,10 +177,10 @@ class _HomePageState extends State<HomePage> {
                                               ),
                                             ),
                                             Padding(
-                                              padding: EdgeInsets.only(top: 15),
+                                              padding: const EdgeInsets.only(top: 15),
                                               child: Text(
                                                 _wifiStatus,
-                                                style: TextStyle(color: Color(0xFF807182), fontSize: 20),
+                                                style: descriptionText,
                                               ),
                                             ),
                                           ],
@@ -164,15 +193,18 @@ class _HomePageState extends State<HomePage> {
 
                               //LID STATUS
                               Padding(
-                                padding: EdgeInsets.only(right: 10, top: 10),
-                                child: Container(
-                                  width: _screenWidth * 0.45,
-                                  height: _screenHeight * 0.05,
-                                  decoration: cardDecoration,
-                                  child: Center(
-                                    child: Text(
-                                      _lidStatusButton,
-                                      style: TextStyle(color: Color(0xFF807182), fontSize: 20),
+                                padding: const EdgeInsets.only(right: 10, top: 10),
+                                child: InkWell(
+                                  onTap: () { lidState(); },
+                                  child: Container(
+                                    width: _screenWidth * 0.45,
+                                    height: _screenHeight * 0.05,
+                                    decoration: cardDecoration,
+                                    child: Center(
+                                      child: Text(
+                                        _lidStatusButton,
+                                        style: descriptionText,
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -182,11 +214,31 @@ class _HomePageState extends State<HomePage> {
 
                           //HUMID BUTTON
                           Padding(
-                            padding: EdgeInsets.only(left: 10),
+                            padding: const EdgeInsets.only(left: 10),
                             child: Container(
                               width: _screenWidth * 0.4,
                               height: _screenHeight * 0.2,
                               decoration: cardDecoration,
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget> [
+                                    const Text(
+                                      "humidity",
+                                      style: TextStyle(
+                                        color: ThemeColors.textColor,
+                                        fontFamily: 'Comfortaa',
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                                    Text(
+                                      _humid.toString(),
+                                      style: descriptionText,
+                                    )
+                                  ],
+                                ),
+                              ),
                             ),
                           ),
                         ],
@@ -194,28 +246,23 @@ class _HomePageState extends State<HomePage> {
 
                       //SEAL BUTTON
                       Padding(
-                        padding: EdgeInsets.only(top: 20),
+                        padding: const EdgeInsets.only(top: 20),
                         child: Container(
                           width: _screenWidth * 0.9,
                           height: _screenHeight * 0.05,
                           decoration: cardDecoration,
+                          child: Center(
+                            child: Text(
+                              "SEAL NOW",
+                              style: descriptionText,
+                            ),
+                          ),
                         ),
                       ),
                     ],
                   ),
                 ),
               ),
-
-              // Text(_displayText, style: const TextStyle(fontSize: 50, color: Colors.black),),
-              // ElevatedButton(
-              //     onPressed: () async {
-              //       try{
-              //         await database.update({'/rgbString' : "10"});
-              //       }catch (e) {
-              //
-              //       }
-              //     },
-              //     child: const Text("update data",))
             ],
           ),
         ),
