@@ -16,7 +16,7 @@ class _HomePageState extends State<HomePage> {
   final _database = FirebaseDatabase.instance.reference();
   final database = FirebaseDatabase.instance.reference();
   late StreamSubscription _readDatabase;
-
+  late String _lidStatusImage;
 
   @override
   void initState() {
@@ -30,6 +30,13 @@ class _HomePageState extends State<HomePage> {
       setState(() {
         // description == 483? _displayText = "TRUE" : _displayText = "FALSE";
         _displayText = description.toString();
+      });
+    });
+
+    _database.child('/lidStatus').onValue.listen((event) {
+      final int lidStatus = event.snapshot.value;
+      setState(() {
+        lidStatus == 1? _lidStatusImage = 'assets/images/bin-open.png' : _lidStatusImage = 'assets/images/bin-close.png';
       });
     });
   }
@@ -47,6 +54,7 @@ class _HomePageState extends State<HomePage> {
               Container(
                 color: Colors.blue,
                 width: _screenWidth,
+                height: _screenHeight * 0.1,
                 child: const Padding(
                   padding: EdgeInsets.only(top: 25, left: 30, bottom: 25),
                   child: Text(
@@ -57,50 +65,134 @@ class _HomePageState extends State<HomePage> {
               ),
 
               Container(
-                color: Colors.blue,
-                width: MediaQuery.of(context).size.width,
-                child: Stack(
-                  children: <Widget> [
-                    Positioned(
-                      bottom: 0,
-                      child: Container(
-                        color: Colors.red,
-                        width: _screenWidth,
-                        height: _screenHeight * 0.075,
+                  color: Colors.blue,
+                  width: _screenWidth,
+                  height: _screenHeight * 0.5,
+                  child: Stack(
+                    children: <Widget> [
+                      Positioned(
+                        bottom: 0,
+                        child: Container(
+                          color: Colors.red,
+                          width: _screenWidth,
+                          height: _screenHeight * 0.075,
+                        ),
                       ),
-                    ),
 
-                    Center(
-                      child: SizedBox(
-                        child: Image(image: AssetImage('assets/images/bin-open.png'),),
-                        height: _screenHeight * 0.4,
+                      Padding(
+                        padding: EdgeInsets.only(bottom: 20),
+                        child: Center(
+                          child: SizedBox(
+                            child: Image(image: AssetImage(_lidStatusImage),),
+                            height: _screenHeight * 0.45,
+                          ),
+                        ),
                       ),
-                    ),
-                  ],
-                ),
+                    ],
+                  )
               ),
 
               Container(
+                color: Colors.red,
+                height: _screenHeight * 0.35,
                 width: _screenWidth,
-                height: _screenHeight,
-                color: Colors.yellow,
-                child: Column(
-                  children: <Widget> [
-
-                  ],
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  child: Column(
+                    children: <Widget> [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget> [
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget> [
+                              Padding(
+                                padding: EdgeInsets.only(right: 10, bottom: 10),
+                                child: Container(
+                                  width: _screenWidth * 0.4,
+                                  height: _screenHeight * 0.125,
+                                  decoration: const BoxDecoration(
+                                    color: Colors.greenAccent,
+                                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.white12,
+                                        blurRadius: 10.0,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(right: 10, top: 5),
+                                child: Container(
+                                  width: _screenWidth * 0.4,
+                                  height: _screenHeight * 0.05,
+                                  decoration: const BoxDecoration(
+                                    color: Colors.greenAccent,
+                                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.white12,
+                                        blurRadius: 10.0,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(left: 10),
+                            child: Container(
+                              width: _screenWidth * 0.4,
+                              height: _screenHeight * 0.185,
+                              decoration: const BoxDecoration(
+                                color: Colors.greenAccent,
+                                borderRadius: BorderRadius.all(Radius.circular(10)),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.white12,
+                                    blurRadius: 10.0,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(top: 15),
+                        child: Container(
+                          width: _screenWidth * 0.85,
+                          height: _screenHeight * 0.05,
+                          decoration: const BoxDecoration(
+                              color: Colors.greenAccent,
+                              borderRadius: BorderRadius.all(Radius.circular(10)),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.white12,
+                                  blurRadius: 10.0,
+                                )
+                              ]
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
 
-              Text(_displayText, style: const TextStyle(fontSize: 50, color: Colors.black),),
-              ElevatedButton(
-                  onPressed: () async {
-                    try{
-                      await database.update({'/rgbString' : "10"});
-                    }catch (e) {
-
-                    }
-                  },
-                  child: const Text("update data",))
+              // Text(_displayText, style: const TextStyle(fontSize: 50, color: Colors.black),),
+              // ElevatedButton(
+              //     onPressed: () async {
+              //       try{
+              //         await database.update({'/rgbString' : "10"});
+              //       }catch (e) {
+              //
+              //       }
+              //     },
+              //     child: const Text("update data",))
             ],
           ),
         ),
