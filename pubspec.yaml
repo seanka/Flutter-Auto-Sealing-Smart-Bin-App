@@ -69,6 +69,20 @@ flutter:
     - assets/images/bin-open.png
     - assets/images/wifi-icon.gif
 
+  fonts:
+    - family: Comfortaa
+      fonts:
+        - asset: assets/fonts/Comfortaa-Light
+          weight: 100
+        - asset: assets/fonts/Comfortaa-Medium
+          weight: 200
+        - asset: assets/fonts/Comfortaa-Regular
+          weight: 300
+        - asset: assets/fonts/Comfortaa-SemiBold
+          weight: 400
+        - asset: assets/fonts/Comfortaa-Bold
+          weight: 500
+
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
 
