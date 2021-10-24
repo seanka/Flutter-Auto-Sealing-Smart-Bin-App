@@ -67,6 +67,7 @@ flutter:
   assets:
     - assets/images/bin-close.png
     - assets/images/bin-open.png
+    - assets/images/wifi-icon.gif
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

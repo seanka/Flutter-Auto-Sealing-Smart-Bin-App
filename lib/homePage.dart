@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'constant.dart';
 
 class HomePage extends StatefulWidget{
   const HomePage({Key? key}) : super(key: key);
@@ -13,10 +14,12 @@ class HomePage extends StatefulWidget{
 
 class _HomePageState extends State<HomePage> {
   String _displayText = 'aaaa';
+  String _wifiStatus = '';
+  String _lidStatusButton = '';
   final _database = FirebaseDatabase.instance.reference();
   final database = FirebaseDatabase.instance.reference();
   late StreamSubscription _readDatabase;
-  late String _lidStatusImage;
+  late String _lidStatusImage = 'assets/images/bin-close.png';
 
   @override
   void initState() {
@@ -34,11 +37,20 @@ class _HomePageState extends State<HomePage> {
     });
 
     _database.child('/lidStatus').onValue.listen((event) {
-      final int lidStatus = event.snapshot.value;
+      final int lid = event.snapshot.value;
       setState(() {
-        lidStatus == 1? _lidStatusImage = 'assets/images/bin-open.png' : _lidStatusImage = 'assets/images/bin-close.png';
+        lid == 1? _lidStatusImage = 'assets/images/bin-open.png' : _lidStatusImage = 'assets/images/bin-close.png';
+        lid == 1? _lidStatusButton = 'CLOSE LID' : _lidStatusButton = 'OPEN LID';
       });
     });
+
+    _database.child('/wifiSSID').onValue.listen((event) {
+      final String wifiSSID = event.snapshot.value;
+      setState(() {
+        _wifiStatus = wifiSSID;
+      });
+    });
+
   }
 
   @override
@@ -52,20 +64,20 @@ class _HomePageState extends State<HomePage> {
           child: Column(
             children: <Widget> [
               Container(
-                color: Colors.blue,
+                color: ThemeColors.mainColor,
                 width: _screenWidth,
                 height: _screenHeight * 0.1,
                 child: const Padding(
                   padding: EdgeInsets.only(top: 25, left: 30, bottom: 25),
                   child: Text(
                     "smart bin",
-
+                    style: TextStyle(fontSize: 30, color: Color(0xFF807182), fontFamily: 'Sans-serif'),
                   ),
                 ),
               ),
 
               Container(
-                  color: Colors.blue,
+                  color: ThemeColors.mainColor,
                   width: _screenWidth,
                   height: _screenHeight * 0.5,
                   child: Stack(
@@ -73,7 +85,7 @@ class _HomePageState extends State<HomePage> {
                       Positioned(
                         bottom: 0,
                         child: Container(
-                          color: Colors.red,
+                          color: ThemeColors.mainColor2,
                           width: _screenWidth,
                           height: _screenHeight * 0.075,
                         ),
@@ -93,11 +105,11 @@ class _HomePageState extends State<HomePage> {
               ),
 
               Container(
-                color: Colors.red,
+                color: ThemeColors.mainColor2,
                 height: _screenHeight * 0.35,
                 width: _screenWidth,
                 child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  padding: EdgeInsets.symmetric(horizontal: 0),
                   child: Column(
                     children: <Widget> [
                       Row(
@@ -106,76 +118,87 @@ class _HomePageState extends State<HomePage> {
                           Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget> [
+
+                              //WIFI STATUS
                               Padding(
                                 padding: EdgeInsets.only(right: 10, bottom: 10),
                                 child: Container(
-                                  width: _screenWidth * 0.4,
+                                  width: _screenWidth * 0.45,
                                   height: _screenHeight * 0.125,
-                                  decoration: const BoxDecoration(
-                                    color: Colors.greenAccent,
-                                    borderRadius: BorderRadius.all(Radius.circular(10)),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.white12,
-                                        blurRadius: 10.0,
-                                      ),
-                                    ],
+                                  decoration: cardDecoration,
+                                  child: Padding(
+                                    padding: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: <Widget> [
+                                        Text(
+                                          "status",
+                                          style: TextStyle(fontSize: 15, color: Color(0xFF807182)),
+                                        ),
+                                        Row(
+                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                          children: <Widget> [
+                                            Padding(
+                                              padding: EdgeInsets.only(top: 15, right: 15),
+                                              child: SizedBox(
+                                                height: _screenHeight * 0.025,
+                                                child: Image.asset(
+                                                    'assets/images/wifi-icon.gif'
+                                                ),
+                                              ),
+                                            ),
+                                            Padding(
+                                              padding: EdgeInsets.only(top: 15),
+                                              child: Text(
+                                                _wifiStatus,
+                                                style: TextStyle(color: Color(0xFF807182), fontSize: 20),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),
+
+                              //LID STATUS
                               Padding(
-                                padding: EdgeInsets.only(right: 10, top: 5),
+                                padding: EdgeInsets.only(right: 10, top: 10),
                                 child: Container(
-                                  width: _screenWidth * 0.4,
+                                  width: _screenWidth * 0.45,
                                   height: _screenHeight * 0.05,
-                                  decoration: const BoxDecoration(
-                                    color: Colors.greenAccent,
-                                    borderRadius: BorderRadius.all(Radius.circular(10)),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.white12,
-                                        blurRadius: 10.0,
-                                      ),
-                                    ],
+                                  decoration: cardDecoration,
+                                  child: Center(
+                                    child: Text(
+                                      _lidStatusButton,
+                                      style: TextStyle(color: Color(0xFF807182), fontSize: 20),
+                                    ),
                                   ),
                                 ),
                               ),
                             ],
                           ),
+
+                          //HUMID BUTTON
                           Padding(
                             padding: EdgeInsets.only(left: 10),
                             child: Container(
                               width: _screenWidth * 0.4,
-                              height: _screenHeight * 0.185,
-                              decoration: const BoxDecoration(
-                                color: Colors.greenAccent,
-                                borderRadius: BorderRadius.all(Radius.circular(10)),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.white12,
-                                    blurRadius: 10.0,
-                                  ),
-                                ],
-                              ),
+                              height: _screenHeight * 0.2,
+                              decoration: cardDecoration,
                             ),
                           ),
                         ],
                       ),
+
+                      //SEAL BUTTON
                       Padding(
-                        padding: EdgeInsets.only(top: 15),
+                        padding: EdgeInsets.only(top: 20),
                         child: Container(
-                          width: _screenWidth * 0.85,
+                          width: _screenWidth * 0.9,
                           height: _screenHeight * 0.05,
-                          decoration: const BoxDecoration(
-                              color: Colors.greenAccent,
-                              borderRadius: BorderRadius.all(Radius.circular(10)),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.white12,
-                                  blurRadius: 10.0,
-                                )
-                              ]
-                          ),
+                          decoration: cardDecoration,
                         ),
                       ),
                     ],
