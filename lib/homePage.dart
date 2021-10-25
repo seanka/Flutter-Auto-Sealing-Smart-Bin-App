@@ -22,7 +22,8 @@ class _HomePageState extends State<HomePage> {
   late StreamSubscription _readDatabase;
   late String _lidStatusImage = 'assets/images/bin-close.png';
   late int _lid;
-  late int _humid;
+  late int _humid = 0;
+  late int _sealStatus;
 
   @override
   void initState() {
@@ -74,18 +75,22 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  void sealState() async {
+
+  }
+
   @override
   Widget build(BuildContext context) {
     final _screenWidth = MediaQuery.of(context).size.width;
     final _screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
+      backgroundColor: ThemeColors.mainColor,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
             children: <Widget> [
               Container(
-                color: ThemeColors.mainColor,
                 width: _screenWidth,
                 height: _screenHeight * 0.1,
                 child: const Padding(
@@ -103,12 +108,13 @@ class _HomePageState extends State<HomePage> {
                   height: _screenHeight * 0.5,
                   child: Stack(
                     children: <Widget> [
-                      Positioned(
-                        bottom: 0,
-                        child: Container(
-                          color: ThemeColors.mainColor2,
-                          width: _screenWidth,
-                          height: _screenHeight * 0.075,
+                      Align(
+                        alignment: Alignment(0, 0.4),
+                        child: SizedBox(
+                          width: _screenWidth * 0.95,
+                          child: const Image(
+                            image: AssetImage('assets/images/background.png'),
+                          ),
                         ),
                       ),
 
@@ -128,11 +134,7 @@ class _HomePageState extends State<HomePage> {
                   )
               ),
 
-              Container(
-                color: ThemeColors.mainColor2,
-                height: _screenHeight * 0.35,
-                width: _screenWidth,
-                child: Padding(
+            Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 0),
                   child: Column(
                     children: <Widget> [
@@ -232,10 +234,22 @@ class _HomePageState extends State<HomePage> {
                                         fontWeight: FontWeight.w400,
                                       ),
                                     ),
-                                    Text(
-                                      _humid.toString(),
-                                      style: descriptionText,
-                                    )
+
+                                    Row(
+                                      children: <Widget> [
+                                        SizedBox(
+                                          height: _screenHeight * 0.1,
+                                          child: Image.asset(
+                                              'assets/images/humid.gif'
+                                          ),
+                                        ),
+
+                                        Text(
+                                          _humid.toString(),
+                                          style: descriptionText,
+                                        ),
+                                      ],
+                                    ),
                                   ],
                                 ),
                               ),
@@ -262,7 +276,6 @@ class _HomePageState extends State<HomePage> {
                     ],
                   ),
                 ),
-              ),
             ],
           ),
         ),

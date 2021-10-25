@@ -68,6 +68,8 @@ flutter:
     - assets/images/bin-close.png
     - assets/images/bin-open.png
     - assets/images/wifi-icon.gif
+    - assets/images/humid.gif
+    - assets/images/background.png
 
   fonts:
     - family: Comfortaa
