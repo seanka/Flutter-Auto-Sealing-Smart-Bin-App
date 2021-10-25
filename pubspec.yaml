@@ -70,6 +70,9 @@ flutter:
     - assets/images/wifi-icon.gif
     - assets/images/humid.gif
     - assets/images/background.png
+    - assets/images/lid_false.png
+    - assets/images/lid_true.png
+    - assets/images/bigTree.png
 
   fonts:
     - family: Comfortaa
