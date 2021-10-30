@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 abstract class ThemeColors{
   static const Color mainColor = Color(0xFFBDF7B7);
+  // static const Color mainColor = Color(0xFF9BE564);
   static const Color mainColor2 = Color(0xFFF7B1AB);
   static const Color accentColor = Color(0xFFCEF0CC);
   static const Color textColor = Color(0xFF807182);

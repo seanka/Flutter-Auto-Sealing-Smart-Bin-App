@@ -73,6 +73,7 @@ flutter:
     - assets/images/lid_false.png
     - assets/images/lid_true.png
     - assets/images/bigTree.png
+    - assets/images/vines.png
 
   fonts:
     - family: Comfortaa
