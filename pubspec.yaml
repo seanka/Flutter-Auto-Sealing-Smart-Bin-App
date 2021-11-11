@@ -74,6 +74,8 @@ flutter:
     - assets/images/lid_true.png
     - assets/images/bigTree.png
     - assets/images/vines.png
+    - assets/images/sealProgres.gif
+    - assets/images/smolLeaves.png
 
   fonts:
     - family: Comfortaa
